@@ -91,7 +91,7 @@ RestaurantProject/
 
 
 ## ✅ Features
-
+**Restaurant**
 - Get all restaurants  
 - Get restaurant by ID  
 - Create a new restaurant  
@@ -135,6 +135,6 @@ RestaurantService.createRestaurant(newRestaurant);
 
 ## 🙌 Author
 
-Developed by Rajeev Telagasetti.
+Developed by `Rajeev Telagasetti`.
 Feel free to fork, use, or contribute to this project!
 
