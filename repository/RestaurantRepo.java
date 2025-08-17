@@ -52,7 +52,7 @@ public class RestaurantRepo {
       c = connectDB();
       st = c.createStatement();
 
-      rs = st.executeQuery("SELECT * FROM restaurant;");
+      rs = st.executeQuery("SELECT restaurant_id, name, location, restaurant_type, gst_no, established_date FROM restaurant;");
 
       ArrayList<Restaurant> al = new ArrayList<>();
 
@@ -65,12 +65,14 @@ public class RestaurantRepo {
         String location = rs.getString("location");
         String est_date = rs.getString("established_date");
         String gst_no = rs.getString("gst_no");
+        String restaurant_type = rs.getString("restaurant_type");
 
         robj.setId(res_id);
         robj.setName(res_name);
         robj.setLocation(location);
         robj.setDate(est_date);
         robj.setGstNo(gst_no);
+        robj.setRestaurantType(restaurant_type);
 
         al.add(robj);
       }
@@ -85,6 +87,43 @@ public class RestaurantRepo {
       st.close();
       rs.close();
       c.close();
+    }
+  }
+
+  public static Restaurant getRestaurantById( int restaurant_id ) throws SQLException {
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    try{
+
+      con = connectDB();
+      pst = con.prepareStatement("select restaurant_id, name, location, restaurant_type, gst_no, established_date from restaurant where restaurant_id=?");
+      pst.setInt(1, restaurant_id);
+      rs = pst.executeQuery();
+
+      if( rs.next() ){
+        Restaurant robj = new Restaurant();
+        robj.setId(rs.getInt("restaurant_id"));
+        robj.setName(rs.getString("name"));
+        robj.setLocation(rs.getString("location"));
+        robj.setRestaurantType(rs.getString("restaurant_type"));
+        robj.setGstNo(rs.getString("gst_no"));
+        robj.setDate(rs.getString("established_date"));
+        return robj;
+      }
+      else {
+        System.out.println("No restaurant found with id - " + restaurant_id);
+        return null;
+      }
+
+
+    } catch(Exception e){
+      e.printStackTrace();
+      return null;
+    } finally {
+      rs.close();
+      pst.close();
+      con.close();
     }
   }
 
@@ -156,7 +195,7 @@ public class RestaurantRepo {
     }
   }
 
-  public static void updateRestaurantById( int restaurant_id, String restaurant_name, String location, String gst_no, String established_date ) throws SQLException {
+  public static void updateRestaurantById( int restaurant_id, Restaurant robj ) throws SQLException {
 
     Connection con = null;
     PreparedStatement pst = null;
@@ -164,10 +203,10 @@ public class RestaurantRepo {
     try {
       con = connectDB();
       pst = con.prepareStatement("update restaurant set name=?, location=?, gst_no=?, established_date=? where restaurant_id=?");
-      pst.setString(1, restaurant_name);
-      pst.setString(2, location);
-      pst.setString(3, gst_no);
-      pst.setString(4, established_date);
+      pst.setString(1, robj.getName() );
+      pst.setString(2, robj.getLocation() );
+      pst.setString(3, robj.getGstNo() );
+      pst.setString(4, robj.getDate() );
       pst.setInt(5, restaurant_id);
 
       int count = pst.executeUpdate();
@@ -177,6 +216,34 @@ public class RestaurantRepo {
         System.out.println("Restaurant with id - " + restaurant_id + " updated successfully");
       }
     } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      pst.close();
+      con.close();
+    }
+
+  }
+
+  // update restaurant by type using gst no.
+  public static void updateRestaurantGSTNoByType(String restaurant_type, String gst_no ) throws Exception {
+
+    Connection con = null;
+    PreparedStatement pst = null;
+    try{
+      con = connectDB();
+      pst = con.prepareStatement("update restaurant set gst_no=? where restaurant_type=?" );
+      pst.setString(1, gst_no);
+      pst.setString(2, restaurant_type);
+
+      int count = pst.executeUpdate();
+
+      if( count==0 ){
+        logger.info("No records updated");
+      } else {
+        logger.info("Updated "+ count + " restaurants by type - " + restaurant_type + " successfully" );
+      }
+
+    } catch(Exception e){
       e.printStackTrace();
     } finally {
       pst.close();
