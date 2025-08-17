@@ -8,30 +8,33 @@ A simple Java console application to manage restaurant records using JDBC and My
 
 ## 📁 Project Structure
 
+
+```text
 RestaurantProject/
-├── build.bat                            
-├── README.md                            
+├── build.bat
+├── README.md
 │
 ├── lib/
-│   ├── mysql-connector-java-8.0.xx.jar  
-│   └── RestaurantConstants.java         
+│   ├── mysql-connector-java-8.0.xx.jar
+│   └── RestaurantConstants.java
 │
 ├── model/
-│   ├── Restaurant.java                  
-│   ├── Customer.java                    
-│   ├── Employee.java                    
-│   ├── Menu.java                        
-│   ├── Order.java                       
-│   ├── PaymentTransaction.java          
-│   └── CustomerReview.java              
+│   ├── Restaurant.java
+│   ├── Customer.java
+│   ├── Employee.java
+│   ├── Menu.java
+│   ├── Order.java
+│   ├── PaymentTransaction.java
+│   └── CustomerReview.java
 │
 ├── repository/
-│   └── RestaurantRepo.java              
+│   └── RestaurantRepo.java
 │
 ├── service/
-│   └── RestaurantService.java           
+│   └── RestaurantService.java
 │
-├── Main.java                            
+├── Main.java
+```
 
 ---
 
